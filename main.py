@@ -51,31 +51,44 @@ def evaluate_expression(expr, variables):
 # Initialize an empty list to store the results
 results = []
 
-# Define the expressions in each line
-expressions = [
-    "4**2==16",  # Logical expression with real number
-    "x = 10",  # Assignment operation (no value to print)
-    "y = x // 3",  # Assignment operation with real number
-    "x <= y",  # Logical expression with variable
-    "x >= y",
-    "y + 25.0",  # Logical expression with real number
-    "x != y",  # Logical expression with "!=" operator and variables
-    "x != 3",  # Logical expression with "!=" operator and literal value
-    "5 != 5",  # Logical expression with "!=" operator and literal values
-    "5 >= 5",
-    "(2 + 3) * (4 - 1)",  # Expression with parentheses
-    "((x +y) * 2) / 3",  # Nested parentheses
-    "2 +3 ==5",
-    "(5+1) *2 == 12",
-    "(9+1) *2 == 20",
-]
+# # Define the expressions in each line
+# expressions = [
+#     "x = 10",
+#     "y = x // 3",
+#     "x <= y",
+#     "x >= y",
+#     "y + 25.0",
+#     "x != y",
+#     "x != 3",
+#     "5 != 5",
+#     "5 >= 5",
+#     "(2 + 3) * (4 - 1)",
+#     "((x +y) * 2) / 3", 
+#     "2 +3 ==5",
+#     "(5+1) *2 == 12",
+#     "(9+1) *2 == 20",
+# ]
+
+
+formatted_results = []
+text_file = open("input.txt", "r")
+line = text_file.readlines()
+
+
+
+for j in line:
+    formatted_result = f"{j.strip()}"
+    formatted_results.append(formatted_result)
+    
+text_file.close()
 
 # Create a dictionary to store variable values
 variables = {}
 
 # Evaluate each expression and load the result into the 'results' list or update variables
-for expr in expressions:
+for expr in formatted_results:
     try:
+        variables_snapshot = variables.copy()
         # Check if "!=" is a standalone operator
         if "!=" in expr:
             left, right = [part.strip() for part in expr.split("!=")]
@@ -118,3 +131,6 @@ for expr in expressions:
 # Print the results
 for i, result in enumerate(results):
     print(f"Line {i + 1}: {result}")
+
+
+
