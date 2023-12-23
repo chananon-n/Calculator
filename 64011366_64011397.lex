@@ -1,0 +1,14 @@
+INT \d+
+REAL \d+\.\d+
+POW \^
+VAR [a-zA-Z_][a-zA-Z0-9_]*
+PLUS \+
+MINUS -
+TIMES \*
+DIVIDE /
+ASSIGN =
+NEQ !=
+LPAREN \(
+RPAREN \)
+WS \s+
+ERR .

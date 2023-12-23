@@ -1,7 +1,20 @@
 import re
+from analyzer import tokenize
 
 def is_valid_variable_name(variable_name):
     return re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', variable_name) is not None
+
+def deleteFileContent(filename):
+    with open(filename, "w"):
+        pass  # Open the file in write mode to truncate its content to zero length
+
+def writeLexicalAnalysisResult(result):
+    with open("64011366_64011397.tok", "a") as text_file:  # Use "a" to append to the file
+        text_file.write(result + '\n')  # Add a new line after each result
+
+def writeLexicalGrammarResult(result):
+    with open("64011366_64011397.lex", "a") as text_file:
+        text_file.write(result + '\n')
 
 def evaluate_expression(expr, variables):
     try:
@@ -127,6 +140,41 @@ for expr in formatted_results:
 
     except ValueError as ve:
         results.append(str(ve))
+
+#delete file content
+deleteFileContent("64011366_64011397.tok")
+deleteFileContent("64011366_64011397.lex")
+
+#writing lexical analysis result
+for i in formatted_results:
+    try:
+        result = tokenize(i)
+        writeLexicalAnalysisResult(f"{''.join(result)}")
+    except ValueError as e:
+        print(f"Error: {e}")
+        
+lexical_grammar = [
+    ('INT', r'\d+'),                 # Integer
+    ('REAL', r'\d+\.\d+'),           # Real number
+    ('POW', r'\^'),                   # Exponentiation
+    ('VAR', r'[a-zA-Z_][a-zA-Z0-9_]*'),  # Variable
+    ('PLUS', r'\+'),                  # Addition
+    ('MINUS', r'-'),                  # Subtraction
+    ('TIMES', r'\*'),                 # Multiplication
+    ('DIVIDE', r'/'),                 # Division
+    ('ASSIGN', r'='),                 # Assignment
+    ('NEQ', r'!='),                   # Not Equal
+    ('LPAREN', r'\('),                # Left Parenthesis
+    ('RPAREN', r'\)'),                # Right Parenthesis
+    ('WS', r'\s+'),                   # Whitespace
+    ('ERR', r'.'),                    # Error
+]
+
+def format_output(grammar):
+    for token_type, regex in grammar:
+        writeLexicalGrammarResult(f"{token_type} {regex}")
+        
+format_output(lexical_grammar)
 
 # Print the results
 for i, result in enumerate(results):
