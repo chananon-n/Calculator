@@ -32,21 +32,3 @@ def tokenize(input_string):
             raise ValueError(f"Unexpected character: {input_string[0]}")
     return tokens
 
-# Examples
-examples = [
-    "23+8",
-    "2.5*0",
-    "5NUM^3.0",
-    "x=5",
-    "10*x",
-    "x=y",
-    "x!=5",
-    "X#+8",
-]
-
-for example in examples:
-    try:
-        result = tokenize(example)
-        print(f"{example} => {' '.join(result)}")
-    except ValueError as e:
-        print(f"Error: {e}")

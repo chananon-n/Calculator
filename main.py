@@ -1,20 +1,27 @@
 import re
 from analyzer import tokenize
 
-def is_valid_variable_name(variable_name):
-    return re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', variable_name) is not None
+
+def is_valid_variable_name(var):
+    return re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', var) is not None
+
 
 def deleteFileContent(filename):
     with open(filename, "w"):
-        pass  # Open the file in write mode to truncate its content to zero length
+        pass
 
-def writeLexicalAnalysisResult(result):
-    with open("64011366_64011397.tok", "a") as text_file:  # Use "a" to append to the file
-        text_file.write(result + '\n')  # Add a new line after each result
+
+def writeLexicalAnalysisResult(res):
+    # Open the file in append mode
+    with open("64011366_64011397.tok", "a") as text_file:
+        # Write the result to the file
+        text_file.write(res + '\n')
+
 
 def writeLexicalGrammarResult(result):
     with open("64011366_64011397.lex", "a") as text_file:
         text_file.write(result + '\n')
+
 
 def evaluate_expression(expr, variables):
     try:
@@ -61,42 +68,45 @@ def evaluate_expression(expr, variables):
     except Exception as e:
         raise ValueError(f"Error evaluating expression '{expr}': {str(e)}")
 
+def readAndFormatFile(filename):
+    res = []
+
+    try:
+        with open(filename, "r") as text_file:
+            lines = text_file.readlines()
+
+            for j in lines:
+                res = f"{j.strip()}"
+                res.append(res)
+
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found.")
+
+    return res
+
+
 # Initialize an empty list to store the results
 results = []
-
-# # Define the expressions in each line
-# expressions = [
-#     "x = 10",
-#     "y = x // 3",
-#     "x <= y",
-#     "x >= y",
-#     "y + 25.0",
-#     "x != y",
-#     "x != 3",
-#     "5 != 5",
-#     "5 >= 5",
-#     "(2 + 3) * (4 - 1)",
-#     "((x +y) * 2) / 3", 
-#     "2 +3 ==5",
-#     "(5+1) *2 == 12",
-#     "(9+1) *2 == 20",
-# ]
-
-
-formatted_results = []
-text_file = open("input.txt", "r")
-line = text_file.readlines()
-
-
-
-for j in line:
-    formatted_result = f"{j.strip()}"
-    formatted_results.append(formatted_result)
-    
-text_file.close()
-
 # Create a dictionary to store variable values
 variables = {}
+# Read the file and format the results
+formatted_results = readAndFormatFile("64011366_64011397.txt")
+lexical_grammar = [
+    ('INT', r'\d+'),  # Integer
+    ('REAL', r'\d+\.\d+'),  # Real number
+    ('POW', r'\^'),  # Exponentiation
+    ('VAR', r'[a-zA-Z_][a-zA-Z0-9_]*'),  # Variable
+    ('PLUS', r'\+'),  # Addition
+    ('MINUS', r'-'),  # Subtraction
+    ('TIMES', r'\*'),  # Multiplication
+    ('DIVIDE', r'/'),  # Division
+    ('ASSIGN', r'='),  # Assignment
+    ('NEQ', r'!='),  # Not Equal
+    ('LPAREN', r'\('),  # Left Parenthesis
+    ('RPAREN', r'\)'),  # Right Parenthesis
+    ('WS', r'\s+'),  # Whitespace
+    ('ERR', r'.'),  # Error
+]
 
 # Evaluate each expression and load the result into the 'results' list or update variables
 for expr in formatted_results:
@@ -141,44 +151,22 @@ for expr in formatted_results:
     except ValueError as ve:
         results.append(str(ve))
 
-#delete file content
+# delete file content
 deleteFileContent("64011366_64011397.tok")
 deleteFileContent("64011366_64011397.lex")
 
-#writing lexical analysis result
+# writing lexical analysis result
 for i in formatted_results:
     try:
         result = tokenize(i)
         writeLexicalAnalysisResult(f"{''.join(result)}")
     except ValueError as e:
         print(f"Error: {e}")
-        
-lexical_grammar = [
-    ('INT', r'\d+'),                 # Integer
-    ('REAL', r'\d+\.\d+'),           # Real number
-    ('POW', r'\^'),                   # Exponentiation
-    ('VAR', r'[a-zA-Z_][a-zA-Z0-9_]*'),  # Variable
-    ('PLUS', r'\+'),                  # Addition
-    ('MINUS', r'-'),                  # Subtraction
-    ('TIMES', r'\*'),                 # Multiplication
-    ('DIVIDE', r'/'),                 # Division
-    ('ASSIGN', r'='),                 # Assignment
-    ('NEQ', r'!='),                   # Not Equal
-    ('LPAREN', r'\('),                # Left Parenthesis
-    ('RPAREN', r'\)'),                # Right Parenthesis
-    ('WS', r'\s+'),                   # Whitespace
-    ('ERR', r'.'),                    # Error
-]
 
-def format_output(grammar):
-    for token_type, regex in grammar:
-        writeLexicalGrammarResult(f"{token_type} {regex}")
-        
-format_output(lexical_grammar)
+# writing lexical grammar result
+for token_type, regex in lexical_grammar:
+    writeLexicalGrammarResult(f"{token_type} {regex}")
 
 # Print the results
 for i, result in enumerate(results):
     print(f"Line {i + 1}: {result}")
-
-
-
