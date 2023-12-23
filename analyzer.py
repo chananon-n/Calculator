@@ -2,7 +2,7 @@ import re
 
 # Define token patterns
 token_patterns = [
-    (r'\d+', 'INT'),  # Match integers
+    (r'\d+(\.\d+)?', 'REAL'),  # Match integers and decimals
     (r'[a-zA-Z_][a-zA-Z0-9_]*', 'VAR'),  # Match variables
     (r'\+', '+/INT'),  # Match addition
     (r'-', '-/INT'),  # Match subtraction
@@ -24,10 +24,7 @@ def tokenize(input_string):
             match = re.match(pattern, input_string)
             if match:
                 value = match.group(0)
-                if token_type != 'INT':
-                    tokens.append(f"{value}/{token_type}")
-                else:
-                    tokens.append(value)
+                tokens.append(f"{value}/{token_type}")
                 input_string = input_string[len(value):].lstrip()
                 break
         else:
@@ -37,7 +34,7 @@ def tokenize(input_string):
 
 # Examples
 examples = [
-    "23-9",
+    "23+8",
     "2.5*0",
     "5NUM^3.0",
     "x=5",
