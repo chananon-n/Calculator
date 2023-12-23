@@ -52,30 +52,47 @@ def evaluate_expression(expr, variables):
 results = []
 
 # Define the expressions in each line
-expressions = [
-    "4**2==16",
-    "x = 10",
-    "y = x // 3",
-    "x <= y",
-    "x >= y",
-    "y + 25.0",
-    "x != y",
-    "x != 3",
-    "5 != 5",
-    "5 >= 5",
-    "(2 + 3) * (4 - 1)",
-    "((x +y) * 2) / 3", 
-    "2 +3 ==5",
-    "(5+1) *2 == 12",
-    "(9+1) *2 == 20",
-]
+# expressions = [
+#     "4**2==16",
+#     "x = 10",
+#     "y = x // 3",
+#     "x <= y",
+#     "x >= y",
+#     "y + 25.0",
+#     "x != y",
+#     "x != 3",
+#     "5 != 5",
+#     "5 >= 5",
+#     "(2 + 3) * (4 - 1)",
+#     "((x +y) * 2) / 3", 
+#     "2 +3 ==5",
+#     "(5+1) *2 == 12",
+#     "(9+1) *2 == 20",
+# ]
+
+expressions = []
+
+test_array = []
+formatted_results = []
+text_file = open("input.txt", "r")
+line = text_file.readlines()
+
+for k in line:
+    test_array.append(k)
+
+for j in test_array:
+    formatted_result = f'{j.strip()}'
+    expressions = line
+    
+text_file.close()
 
 # Create a dictionary to store variable values
 variables = {}
 
 # Evaluate each expression and load the result into the 'results' list or update variables
-for expr in expressions:
+for expr in line:
     try:
+        variables_snapshot = variables.copy()
         # Check if "!=" is a standalone operator
         if "!=" in expr:
             left, right = [part.strip() for part in expr.split("!=")]
@@ -118,3 +135,6 @@ for expr in expressions:
 # Print the results
 for i, result in enumerate(results):
     print(f"Line {i + 1}: {result}")
+
+
+
