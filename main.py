@@ -76,8 +76,8 @@ def readAndFormatFile(filename):
             lines = text_file.readlines()
 
             for j in lines:
-                res = f"{j.strip()}"
-                res.append(res)
+                temp = f"{j.strip()}"
+                res.append(temp)
 
     except FileNotFoundError:
         print(f"Error: File '{filename}' not found.")
@@ -90,7 +90,7 @@ results = []
 # Create a dictionary to store variable values
 variables = {}
 # Read the file and format the results
-formatted_results = readAndFormatFile("64011366_64011397.txt")
+formatted_results = readAndFormatFile("input.txt")
 lexical_grammar = [
     ('INT', r'\d+'),  # Integer
     ('REAL', r'\d+\.\d+'),  # Real number
