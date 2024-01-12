@@ -103,20 +103,29 @@ expressions = readAndFormatFile("input.txt")
 for line_number, expr in enumerate(expressions, start=1):
     try:
         tokens = tokenize(expr)
-        for token in tokens:
-            lexeme, token_type = token.split('/')
+        for i, token in enumerate(tokens):
+            # Split only once to handle cases where lexeme contains '/'
+            lexeme, token_type = token.split('/', 1)
             start_pos = expr.find(lexeme) + 1
             length = len(lexeme)
+
             # Handle different cases for variable names and literals
             if token_type == 'VAR':
                 type_value = 'VAR'
-                value = None  # Set to None for variable names
+                # For the last token, set the value by evaluating it
+                value = eval(lexeme) if i == len(tokens) - 1 else None
             elif token_type == 'REAL':
                 type_value = 'REAL'
                 value = float(lexeme)
+            elif lexeme == '=':
+                # Handle the assignment operator '='
+                type_value = 'ASSIGN'
+                value = None
             else:
+                # If it's not a variable or real number, set value to None
                 type_value = token_type
-                value = int(lexeme)
+                value = None
+
             entry = [lexeme, line_number, start_pos, length, type_value, value]
             write_to_symbol_table('64011397.csv', entry)
     except ValueError as ve:
