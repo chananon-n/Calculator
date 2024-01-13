@@ -217,4 +217,15 @@ for i, result in enumerate(results):
     print(f"Line {i + 1}: {result}")
 
 
+with open("64011397.grammar", "w") as grammar_file:
+    # Write the grammar rules to the file
+    grammar_file.write("<calculation> ::= <expression> | <boolean> | <assignment>\n\n")
+    grammar_file.write("<expression> ::= <expression> PLUS <term> | <expression> MINUS <term> | <term>\n\n")
+    grammar_file.write("<term> ::= <term> TIMES <factor> | <term> REALDIVIDE <factor> | <term> INTDIVIDE <factor> | <factor>\n\n")
+    grammar_file.write("<factor> ::= <factor> POWER <factor> | <atom>\n\n")
+    grammar_file.write("<atom> ::= VAR | INT | REAL | NEGINT | NEGREAL | OPENPAREN <expression> CLOSEPAREN\n\n")
+    grammar_file.write("<boolean> ::= <expression> EQUAL <expression> | <expression> NOTEQUAL <expression> | <expression> GREATER <expression> | <expression> GREATEQUAL <expression> | <expression> LESS <expression> | <expression> LESSEQUAL <expression> | OPENPAREN <boolean> CLOSEPAREN\n\n")
+    grammar_file.write("<assignment> ::= VAR ASSIGN <expression>\n\n")
+    grammar_file.write("<error> ::= ERR\n")
+
 
