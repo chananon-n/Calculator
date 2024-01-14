@@ -63,10 +63,11 @@ def evaluate_expression(expr, variables):
         else:
             # If it doesn't contain any of the specified operators, consider it a standalone expression
             result = eval(expr, variables)
-
         return result
 
     except Exception as e:
+        #write to error format token
+        writeLexicalAnalysisResult(f"ERR")
         raise ValueError(f"Error evaluating expression '{expr}': {str(e)}")
 
 def write_to_symbol_table(filename, entry):
@@ -123,13 +124,14 @@ for line_number, expr in enumerate(expressions, start=1):
                 raise ValueError(f"Unexpected token type: {token_type}")
 
             entry = [lexeme, line_number, start_pos, length, type_value, value]
-            write_to_symbol_table('64011397.csv', entry)
         else:
             raise ValueError("Variable not found in the expression.")
     except ValueError as ve:
         print(f"Error: {ve}")
 
-
+# delete file content
+deleteFileContent("64011366_64011397.tok")
+deleteFileContent("64011366_64011397.lex")
 expressions = readAndFormatFile("input.txt")
 assignment = []
 
@@ -163,39 +165,56 @@ for expr in formatted_results:
         variables_snapshot = variables.copy()
         # Check if "!=" is a standalone operator
         if "!=" in expr:
+            temp = expr
             left, right = [part.strip() for part in expr.split("!=")]
             left_value = variables.get(left, eval(left, variables))
             right_value = variables.get(right, eval(right, variables))
             result = left_value != right_value
+            analyzer = tokenize(temp)
+            writeLexicalAnalysisResult(f"{''.join(analyzer)}")
+
         elif '==' in expr:
+            temp = expr
             left, right = [part.strip() for part in expr.split("==")]
             left_value = variables.get(left, eval(left, variables))
             right_value = variables.get(right, eval(right, variables))
             result = left_value == right_value
+            analyzer = tokenize(temp)
+            writeLexicalAnalysisResult(f"{''.join(analyzer)}")
 
         # Check if ">=" is a standalone operator
         elif ">=" in expr:
+            temp = expr
             left, right = [part.strip() for part in expr.split(">=")]
             left_value = variables.get(left, eval(left, variables))
             right_value = variables.get(right, eval(right, variables))
             result = left_value >= right_value
+            analyzer = tokenize(temp)
+            writeLexicalAnalysisResult(f"{''.join(analyzer)}")
         elif "<=" in expr:
+            temp = expr
             left, right = [part.strip() for part in expr.split("<=")]
             left_value = variables.get(left, eval(left, variables))
             right_value = variables.get(right, eval(right, variables))
             result = left_value <= right_value
+            analyzer = tokenize(temp)
+            writeLexicalAnalysisResult(f"{''.join(analyzer)}")
         # Separate variable assignment from expression
         elif "=" in expr:
+            temp = expr
             variable_name, expr = [part.strip() for part in expr.split("=")]
             if not is_valid_variable_name(variable_name):
                 raise ValueError(f"Invalid variable name: {variable_name}")
             assignment.append((variable_name, expr))
-
             result = evaluate_expression(expr, variables)
             variables[variable_name] = result
+            analyzer = tokenize(temp)
+            writeLexicalAnalysisResult(f"{''.join(analyzer)}")
         # Handle other types of expressions
         else:
             result = evaluate_expression(expr, variables)
+            analyzer = tokenize(expr)
+            writeLexicalAnalysisResult(f"{''.join(analyzer)}")
         results.append(result)
 
     except ValueError as ve:
@@ -227,17 +246,14 @@ for line_number, expr in enumerate(expressions, start=1):
     except ValueError as ve:
         print(f"Error: {ve}")
 
-# delete file content
-deleteFileContent("64011366_64011397.tok")
-deleteFileContent("64011366_64011397.lex")
 
 # writing lexical analysis result
-for i in formatted_results:
-    try:
-        result = tokenize(i)
-        writeLexicalAnalysisResult(f"{''.join(result)}")
-    except ValueError as e:
-        print(f"Error: {e}")
+# for i in formatted_results:
+#     try:
+#         result = tokenize(i)
+#         writeLexicalAnalysisResult(f"{''.join(result)}")
+#     except ValueError as e:
+#         print(f"Error: {e}")
 
 # writing lexical grammar result
 for token_type, regex in lexical_grammar:
@@ -258,5 +274,7 @@ with open("64011397.grammar", "w") as grammar_file:
     grammar_file.write("<boolean> ::= <expression> EQUAL <expression> | <expression> NOTEQUAL <expression> | <expression> GREATER <expression> | <expression> GREATEQUAL <expression> | <expression> LESS <expression> | <expression> LESSEQUAL <expression> | OPENPAREN <boolean> CLOSEPAREN\n\n")
     grammar_file.write("<assignment> ::= VAR ASSIGN <expression>\n\n")
     grammar_file.write("<error> ::= ERR\n")
+
+
 
 

@@ -1,7 +1,6 @@
-import re
 
 def parse_expression(tokens):
-    operators = set(['+', '-', '*', '/', '^', '='])
+    operators = set(['+', '-', '*', '/', '^', '=','!='])
     stack = []
     for token in tokens:
         parts = token.split('/')
@@ -16,11 +15,6 @@ def parse_expression(tokens):
                     stack.append(f"({operand1}{operator}{operand2})")
             elif value in operators:
                 stack.append(value)
-                # if len(stack) < 2:
-                #     raise SyntaxError("Not enough operands for operator")
-                # operand2 = stack.pop()
-                # operand1 = stack.pop()
-                # stack.append(f"({operand1}{value}{operand2})")
             else:
                 raise SyntaxError(f"Invalid token in expression: {value}")
         elif len(parts) == 1 and parts[0] == 'ERR':
