@@ -1,6 +1,7 @@
-
 23/INT +/+ 8/INT 
 2.5/REAL */* 0/INT 
+ERR
 x/VAR =/= 5/INT 
-5/INT */* x/VAR 
-
+10/INT */* x/VAR 
+ERR
+x/VAR !=/!= 5/INT 

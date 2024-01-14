@@ -11,8 +11,9 @@ Before running the code, make sure you have the following prerequisites installe
 No compilation is required for this Python code. Just click run.
 
 ## How to Run
-1. Open a terminal or command prompt.
-2. Navigate to the directory containing the code files.
+1. Write your input in the `input.txt` file.
+2. Open a terminal or command prompt.
+3. Navigate to the directory containing the code files.
 
 ### Running the Code
 Execute the following command:

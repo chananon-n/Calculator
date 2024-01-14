@@ -1,4 +1,7 @@
 (23+8)
 (2.5*0)
+SyntaxError at line 3, pos Error token in expression
 (x=5)
-(5*x)
+(10*x)
+SyntaxError at line 6, pos Error token in expression
+(x!=5)
