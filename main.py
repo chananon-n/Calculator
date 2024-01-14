@@ -103,34 +103,30 @@ expressions = readAndFormatFile("input.txt")
 for line_number, expr in enumerate(expressions, start=1):
     try:
         tokens = tokenize(expr)
-        for i, token in enumerate(tokens):
-            # Split only once to handle cases where lexeme contains '/'
-            lexeme, token_type = token.split('/', 1)
+
+        # Find the variable token in the tokens list
+        var_token = next((token for token in tokens if 'VAR' in token), None)
+
+        if var_token:
+            lexeme, token_type = var_token.split('/', 1)
             start_pos = expr.find(lexeme) + 1
             length = len(lexeme)
 
             # Handle different cases for variable names and literals
             if token_type == 'VAR':
-                type_value = 'VAR'
-                # For the last token, set the value by evaluating it
-                value = eval(lexeme) if i == len(tokens) - 1 else None
-            elif token_type == 'REAL':
-                type_value = 'REAL'
-                value = float(lexeme)
-            elif lexeme == '=':
-                # Handle the assignment operator '='
-                type_value = 'ASSIGN'
-                value = None
+                # If the variable is followed by an assignment operator, set type to INT
+                type_value = 'INT' if '=' in expr else 'VAR'
+                # If the variable is assigned, set value to the assigned value
+                value = int(expr.split('=')[1].strip()) if '=' in expr else None
             else:
-                # If it's not a variable or real number, set value to None
-                type_value = token_type
-                value = None
+                raise ValueError(f"Unexpected token type: {token_type}")
 
             entry = [lexeme, line_number, start_pos, length, type_value, value]
             write_to_symbol_table('64011397.csv', entry)
+        else:
+            raise ValueError("Variable not found in the expression.")
     except ValueError as ve:
         print(f"Error: {ve}")
-
 
 
 
@@ -220,5 +216,16 @@ for token_type, regex in lexical_grammar:
 for i, result in enumerate(results):
     print(f"Line {i + 1}: {result}")
 
+
+with open("64011397.grammar", "w") as grammar_file:
+    # Write the grammar rules to the file
+    grammar_file.write("<calculation> ::= <expression> | <boolean> | <assignment>\n\n")
+    grammar_file.write("<expression> ::= <expression> PLUS <term> | <expression> MINUS <term> | <term>\n\n")
+    grammar_file.write("<term> ::= <term> TIMES <factor> | <term> REALDIVIDE <factor> | <term> INTDIVIDE <factor> | <factor>\n\n")
+    grammar_file.write("<factor> ::= <factor> POWER <factor> | <atom>\n\n")
+    grammar_file.write("<atom> ::= VAR | INT | REAL | NEGINT | NEGREAL | OPENPAREN <expression> CLOSEPAREN\n\n")
+    grammar_file.write("<boolean> ::= <expression> EQUAL <expression> | <expression> NOTEQUAL <expression> | <expression> GREATER <expression> | <expression> GREATEQUAL <expression> | <expression> LESS <expression> | <expression> LESSEQUAL <expression> | OPENPAREN <boolean> CLOSEPAREN\n\n")
+    grammar_file.write("<assignment> ::= VAR ASSIGN <expression>\n\n")
+    grammar_file.write("<error> ::= ERR\n")
 
 
