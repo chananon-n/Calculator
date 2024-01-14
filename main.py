@@ -81,7 +81,7 @@ def write_to_symbol_table(filename, entry):
     with open(filename, 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(entry)
-        
+
 def readAndFormatFile(filename):
     res = []
 
@@ -97,6 +97,7 @@ def readAndFormatFile(filename):
         print(f"Error: File '{filename}' not found.")
 
     return res
+
         
 expressions = readAndFormatFile("input.txt")
 
@@ -128,6 +129,9 @@ for line_number, expr in enumerate(expressions, start=1):
     except ValueError as ve:
         print(f"Error: {ve}")
 
+
+expressions = readAndFormatFile("input.txt")
+assignment = []
 
 
 # Initialize an empty list to store the results
@@ -185,6 +189,7 @@ for expr in formatted_results:
             variable_name, expr = [part.strip() for part in expr.split("=")]
             if not is_valid_variable_name(variable_name):
                 raise ValueError(f"Invalid variable name: {variable_name}")
+            assignment.append((variable_name, expr))
 
             result = evaluate_expression(expr, variables)
             variables[variable_name] = result
@@ -195,6 +200,32 @@ for expr in formatted_results:
 
     except ValueError as ve:
         results.append(str(ve))
+
+for line_number, expr in enumerate(expressions, start=1):
+    try:
+        tokens = tokenize(expr)
+        for i, token in enumerate(tokens):
+            lexeme, token_type = token.split('/', 1)
+            start_pos = expr.find(lexeme) + 1
+            length = len(lexeme)
+
+            if token_type == 'VAR':
+                type_value = 'VAR'
+                value = variables.get(lexeme, None)
+            elif token_type == 'REAL':
+                type_value = 'REAL'
+                value = float(lexeme)
+            elif lexeme == '=':
+                type_value = 'ASSIGN'
+                value = None
+            else:
+                type_value = token_type
+                value = None
+
+            entry = [lexeme, line_number, start_pos, length, type_value, value]
+            write_to_symbol_table('64011397.csv', entry)
+    except ValueError as ve:
+        print(f"Error: {ve}")
 
 # delete file content
 deleteFileContent("64011366_64011397.tok")
