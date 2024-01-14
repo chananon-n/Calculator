@@ -2,6 +2,8 @@ import re
 from analyzer import tokenize
 import csv
 
+from parser import parse_assignment, parse_expression
+
 
 def is_valid_variable_name(var):
     return re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', var) is not None
@@ -274,6 +276,25 @@ with open("64011397.grammar", "w") as grammar_file:
     grammar_file.write("<boolean> ::= <expression> EQUAL <expression> | <expression> NOTEQUAL <expression> | <expression> GREATER <expression> | <expression> GREATEQUAL <expression> | <expression> LESS <expression> | <expression> LESSEQUAL <expression> | OPENPAREN <boolean> CLOSEPAREN\n\n")
     grammar_file.write("<assignment> ::= VAR ASSIGN <expression>\n\n")
     grammar_file.write("<error> ::= ERR\n")
+
+input_filename = "64011366_64011397.tok"
+output_filename = "64011366_64011397.bracket"
+
+with open(input_filename, 'r') as file:
+    input_lines = file.readlines()
+
+with open(output_filename, 'w') as output_file:
+    for i, input_line in enumerate(input_lines, start=1):
+        tokens = input_line.strip().split(' ')
+        try:
+            if 'ASSIGN' in tokens:
+                result = parse_assignment(tokens)
+            else:
+                result = parse_expression(tokens)
+
+            output_file.write(f"{result}\n")
+        except SyntaxError as e:
+            output_file.write(f"SyntaxError at line {i}, pos {e.args[0]}\n")
 
 
 

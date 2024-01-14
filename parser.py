@@ -45,25 +45,25 @@ def parse_assignment(tokens):
     except SyntaxError as e:
         raise SyntaxError(e)
 
-def main():
-    input_filename = "64011366_64011397.tok"
-    output_filename = "64011366_64011397.bracket"
-
-    with open(input_filename, 'r') as file:
-        input_lines = file.readlines()
-
-    with open(output_filename, 'w') as output_file:
-        for i, input_line in enumerate(input_lines, start=1):
-            tokens = input_line.strip().split(' ')
-            try:
-                if 'ASSIGN' in tokens:
-                    result = parse_assignment(tokens)
-                else:
-                    result = parse_expression(tokens)
-
-                output_file.write(f"{result}\n")
-            except SyntaxError as e:
-                output_file.write(f"SyntaxError at line {i}, pos {e.args[0]}\n")
-
-if __name__ == "__main__":
-    main()
+# def main():
+#     input_filename = "64011366_64011397.tok"
+#     output_filename = "64011366_64011397.bracket"
+#
+#     with open(input_filename, 'r') as file:
+#         input_lines = file.readlines()
+#
+#     with open(output_filename, 'w') as output_file:
+#         for i, input_line in enumerate(input_lines, start=1):
+#             tokens = input_line.strip().split(' ')
+#             try:
+#                 if 'ASSIGN' in tokens:
+#                     result = parse_assignment(tokens)
+#                 else:
+#                     result = parse_expression(tokens)
+#
+#                 output_file.write(f"{result}\n")
+#             except SyntaxError as e:
+#                 output_file.write(f"SyntaxError at line {i}, pos {e.args[0]}\n")
+#
+# if __name__ == "__main__":
+#     main()
