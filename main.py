@@ -1,8 +1,9 @@
 import re
 from analyzer import tokenize
 import csv
+from codegen import CodeGenerator
 
-from parser import parse_assignment, parse_expression
+from parser_3 import parse_assignment, parse_expression
 
 
 def is_valid_variable_name(var):
@@ -297,5 +298,10 @@ with open(output_filename, 'w') as output_file:
             output_file.write(f"SyntaxError at line {i}, pos {e.args[0]}\n")
 
 
+
+std = "64011397_64011366.std"
+asm = "64011397_64011366.asm"
+code_generator = CodeGenerator()
+code_generator.generate_assembly(input_filename, std, asm)
 
 
