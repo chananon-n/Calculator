@@ -1,0 +1,32 @@
+<calculation> ::= <expression> { generate_code($1); }
+
+<expression> ::= <expression> PLUS <term> { generate_code($1); generate_code($3); add(); }
+              | <expression> MINUS <term> { generate_code($1); generate_code($3); subtract(); }
+              | <term> { generate_code($1); }
+
+<term> ::= <term> TIMES <factor> { generate_code($1); generate_code($3); multiply(); }
+        | <term> REALDIVIDE <factor> { generate_code($1); generate_code($3); real_divide(); }
+        | <term> INTDIVIDE <factor> { generate_code($1); generate_code($3); int_divide(); }
+        | <factor> { generate_code($1); }
+
+<factor> ::= <factor> POWER <factor> { generate_code($1); generate_code($3); power(); }
+          | <atom> { generate_code($1); }
+
+<atom> ::= VAR { load_var('$1'); }
+        | INT { push_constant($1); }
+        | REAL { push_constant($1); }
+        | NEGINT { push_constant($1); }
+        | NEGREAL { push_constant($1); }
+        | OPENPAREN <expression> CLOSEPAREN { generate_code($2); }
+
+<boolean> ::= <expression> EQUAL <expression> { generate_code($1); generate_code($3); equal(); }
+           | <expression> NOTEQUAL <expression> { generate_code($1); generate_code($3); not_equal(); }
+           | <expression> GREATER <expression> { generate_code($1); generate_code($3); greater(); }
+           | <expression> GREATEQUAL <expression> { generate_code($1); generate_code($3); greater_equal(); }
+           | <expression> LESS <expression> { generate_code($1); generate_code($3); less(); }
+           | <expression> LESSEQUAL <expression> { generate_code($1); generate_code($3); less_equal(); }
+           | OPENPAREN <boolean> CLOSEPAREN { generate_code($2); }
+
+<assignment> ::= VAR ASSIGN <expression> { store_var('$1'); generate_code($3); }
+
+<error> ::= ERR { handle_error(); }
