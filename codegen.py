@@ -47,5 +47,6 @@ def generate_assembly(expression):
     # Write assembly code to file
     with open("64011397_64011366.asm", "a") as file:
         file.write(assembly_code + "\n")
+        file.write("\n")
     print(assembly_code + "\n")
 
