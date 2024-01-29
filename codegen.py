@@ -2,7 +2,7 @@ import re
 
 def generate_assembly(expression):
     try:
-        # Extract content within parentheses
+        
         match = re.match(r'\(([^)]+)\)', expression)
         if not match:
             raise ValueError("SyntaxError: Invalid expression")
@@ -15,7 +15,7 @@ def generate_assembly(expression):
             variable, value = inner_content.split("=")
             assembly_code = f"LD R0 #{value}\nST @{variable} R0"
         else:
-            # Updated tokenization to group consecutive digits with a dot
+            
             tokens = re.findall(r'\d*\.\d+|\d+|[^\d\s]', inner_content)
             if len(tokens) == 3:
                 operand1, operator, operand2 = tokens
@@ -43,16 +43,9 @@ def generate_assembly(expression):
                 raise ValueError("Invalid expression")
     except ValueError as e:
         assembly_code = "ERROR"
+
+    # Write assembly code to file
+    with open("64011397_64011366.asm", "a") as file:
+        file.write(assembly_code + "\n")
     print(assembly_code + "\n")
 
-# # Example usage:
-# expressions = [
-#     "(23+8)",
-#     "(2.5*0)",
-#     "(x=5)",
-#     "(10*x)",
-#     "(x!=5)",
-# ]
-
-# for expr in expressions:
-#     generate_assembly(expr)

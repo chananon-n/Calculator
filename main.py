@@ -3,7 +3,7 @@ from analyzer import tokenize
 import csv
 
 from codegen import generate_assembly
-from parser_3 import parse_assignment, parse_expression
+from parser_1 import parse_assignment, parse_expression
 
 
 def is_valid_variable_name(var):
@@ -245,18 +245,10 @@ for line_number, expr in enumerate(expressions, start=1):
                 value = None
 
             entry = [lexeme, line_number, start_pos, length, type_value, value]
-            write_to_symbol_table('64011397.csv', entry)
+            write_to_symbol_table('64011397_64011366.csv', entry)
     except ValueError as ve:
         print(f"Error: {ve}")
 
-
-# writing lexical analysis result
-# for i in formatted_results:
-#     try:
-#         result = tokenize(i)
-#         writeLexicalAnalysisResult(f"{''.join(result)}")
-#     except ValueError as e:
-#         print(f"Error: {e}")
 
 # writing lexical grammar result
 for token_type, regex in lexical_grammar:
@@ -267,7 +259,7 @@ for i, result in enumerate(results):
     print(f"Line {i + 1}: {result}")
 
 
-with open("64011397.grammar", "w") as grammar_file:
+with open("64011397_64011366.grammar", "w") as grammar_file:
     # Write the grammar rules to the file
     grammar_file.write("<calculation> ::= <expression> | <boolean> | <assignment>\n\n")
     grammar_file.write("<expression> ::= <expression> PLUS <term> | <expression> MINUS <term> | <term>\n\n")
