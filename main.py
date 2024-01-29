@@ -1,8 +1,8 @@
 import re
 from analyzer import tokenize
 import csv
-from codegen import CodeGenerator
 
+from codegen import generate_assembly
 from parser_3 import parse_assignment, parse_expression
 
 
@@ -284,6 +284,19 @@ output_filename = "64011366_64011397.bracket"
 with open(input_filename, 'r') as file:
     input_lines = file.readlines()
 
+with open(output_filename, 'r') as output_file:
+    bracket_lines = output_file.readlines()
+
+# Assuming your generate_assembly function takes a single expression as an argument
+for i, bracket_line in enumerate(bracket_lines, start=1):
+    try:
+        # Assuming each line in the bracket file contains a valid expression
+        generate_assembly(bracket_line.strip())
+    except ValueError as e:
+        print(f"Error in line {i} of bracket file: {e}")
+        
+        
+
 with open(output_filename, 'w') as output_file:
     for i, input_line in enumerate(input_lines, start=1):
         tokens = input_line.strip().split(' ')
@@ -301,7 +314,6 @@ with open(output_filename, 'w') as output_file:
 
 std = "64011397_64011366.std"
 asm = "64011397_64011366.asm"
-code_generator = CodeGenerator()
-code_generator.generate_assembly(input_filename, std, asm)
+
 
 
