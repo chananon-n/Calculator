@@ -2,7 +2,8 @@ import re
 from analyzer import tokenize
 import csv
 
-from parser import parse_assignment, parse_expression
+from codegen import generate_assembly
+from parser_1 import parse_assignment, parse_expression
 
 
 def is_valid_variable_name(var):
@@ -244,18 +245,10 @@ for line_number, expr in enumerate(expressions, start=1):
                 value = None
 
             entry = [lexeme, line_number, start_pos, length, type_value, value]
-            write_to_symbol_table('64011397.csv', entry)
+            write_to_symbol_table('64011397_64011366.csv', entry)
     except ValueError as ve:
         print(f"Error: {ve}")
 
-
-# writing lexical analysis result
-# for i in formatted_results:
-#     try:
-#         result = tokenize(i)
-#         writeLexicalAnalysisResult(f"{''.join(result)}")
-#     except ValueError as e:
-#         print(f"Error: {e}")
 
 # writing lexical grammar result
 for token_type, regex in lexical_grammar:
@@ -266,7 +259,7 @@ for i, result in enumerate(results):
     print(f"Line {i + 1}: {result}")
 
 
-with open("64011397.grammar", "w") as grammar_file:
+with open("64011397_64011366.grammar", "w") as grammar_file:
     # Write the grammar rules to the file
     grammar_file.write("<calculation> ::= <expression> | <boolean> | <assignment>\n\n")
     grammar_file.write("<expression> ::= <expression> PLUS <term> | <expression> MINUS <term> | <term>\n\n")
@@ -283,6 +276,19 @@ output_filename = "64011366_64011397.bracket"
 with open(input_filename, 'r') as file:
     input_lines = file.readlines()
 
+with open(output_filename, 'r') as output_file:
+    bracket_lines = output_file.readlines()
+
+# Assuming your generate_assembly function takes a single expression as an argument
+for i, bracket_line in enumerate(bracket_lines, start=1):
+    try:
+        # Assuming each line in the bracket file contains a valid expression
+        generate_assembly(bracket_line.strip())
+    except ValueError as e:
+        print(f"Error in line {i} of bracket file: {e}")
+        
+        
+
 with open(output_filename, 'w') as output_file:
     for i, input_line in enumerate(input_lines, start=1):
         tokens = input_line.strip().split(' ')
@@ -296,6 +302,10 @@ with open(output_filename, 'w') as output_file:
         except SyntaxError as e:
             output_file.write(f"SyntaxError at line {i}, pos {e.args[0]}\n")
 
+
+
+std = "64011397_64011366.std"
+asm = "64011397_64011366.asm"
 
 
 

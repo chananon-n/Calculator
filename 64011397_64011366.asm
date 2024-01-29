@@ -1,0 +1,96 @@
+LD R0 #23
+LD R1 #8
+ADD.i R2 R0 R1
+ST @print R2
+LD R0 #2.5
+LD R1 #0
+FL.i R0 R0
+FL.i R1 R1
+MUL.f R2 R0 R1
+ST @print R2
+ERROR
+LD R0 #5
+ST @x R0
+LD R0 #10
+LD R1 #x
+MUL.f R2 R0 R1
+ST @print R2
+ERROR
+LD R0 #5
+LD R1 @x
+FL.i R0 R0
+FL.i R1 R1
+NE.f R2 R0 R1
+ST @print R2
+LD R0 #23
+LD R1 #8
+ADD.i R2 R0 R1
+ST @print R2
+LD R0 #2.5
+LD R1 #0
+FL.i R0 R0
+FL.i R1 R1
+MUL.f R2 R0 R1
+ST @print R2
+ERROR
+LD R0 #5
+ST @x R0
+LD R0 #10
+LD R1 #x
+MUL.f R2 R0 R1
+ST @print R2
+ERROR
+LD R0 #5
+LD R1 @x
+FL.i R0 R0
+FL.i R1 R1
+NE.f R2 R0 R1
+ST @print R2
+LD R0 #23
+LD R1 #8
+ADD.i R2 R0 R1
+ST @print R2
+LD R0 #2.5
+LD R1 #0
+FL.i R0 R0
+FL.i R1 R1
+MUL.f R2 R0 R1
+ST @print R2
+ERROR
+LD R0 #5
+ST @x R0
+LD R0 #10
+LD R1 #x
+MUL.f R2 R0 R1
+ST @print R2
+ERROR
+LD R0 #5
+LD R1 @x
+FL.i R0 R0
+FL.i R1 R1
+NE.f R2 R0 R1
+ST @print R2
+LD R0 #23
+LD R1 #8
+ADD.i R2 R0 R1
+ST @print R2
+LD R0 #2.5
+LD R1 #0
+FL.i R0 R0
+FL.i R1 R1
+MUL.f R2 R0 R1
+ST @print R2
+ERROR
+LD R0 #5
+ST @x R0
+LD R0 #10
+LD R1 #x
+MUL.f R2 R0 R1
+ST @print R2
+ERROR
+LD R0 #5
+LD R1 @x
+FL.i R0 R0
+FL.i R1 R1
+NE.f R2 R0 R1
+ST @print R2
